@@ -1,36 +1,13 @@
 package base.linkedarray;
 
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-
-/*
-    关于链表:
-        链表是物理存储单元上非连续的、非顺序的存储结构，数据元素的逻辑顺序是通过链表的指针地址实现，每个元素包含两个结点，一个是存储元素的数据域 (内存空间)，另一个是指向下一个结点地址的指针域。根据指针的指向，链表能形成不同的结构，例如单链表，双向链表，循环链表等。
-
-    链表的特性:
-        创建:
-        增加: 在开始/末尾/任意增加, 增加时,涉及到前后节点指针的断开和重新连接
-        读取: 根据索引读取,需要从头节点遍历过去
-        修改: 根据索引修改,需要从头节点遍历过去,涉及到前后节点指针的断开和重新连接
-        删除: 根据索引删除,需要从头节点遍历过去,涉及到前后节点指针的断开和重新连接
-
-    特性:
-        1. 不能直接使用索引下标操作数据
-        2. 操作中间的元素时,需要从头节点遍历过去,涉及到前后节点指针的断开和重新连接
-
-    校验:
-        1. 不能在空链表时删除
-        2. 根据索引操作时,越界校验
-           按照索引插入时,如果使用抽取的getNode()方法,需要单独处理插入到最后的情况,通用的getNode不能处理index==size的场景
-
- */
-
-
 /**
- * 双链表实现
+ * 单链表实现
  */
-public class MyLinkedListDouble<E> implements Iterable<E> {
+public class MyLinkedListSingle<E> implements Iterable<E> {
 
 
     /**
@@ -45,26 +22,24 @@ public class MyLinkedListDouble<E> implements Iterable<E> {
     private int size;
 
     /**
-     * 双链表节点
+     * 单链表节点
      */
     private static class Node<E> {
         E val;
         Node<E> next;
-        Node<E> prev;
 
         Node(E val) {
             this.val = val;
         }
     }
 
-    public MyLinkedListDouble() {
+    public MyLinkedListSingle() {
         // 首尾空节点占位,构造函数初始化头尾节点
         this.head = new Node<>(null);
         this.tail = new Node<>(null);
 
         //首尾节点相连
         head.next = tail;
-        tail.prev = head;
 
         // 初始链表长度
         this.size = 0;
@@ -82,14 +57,13 @@ public class MyLinkedListDouble<E> implements Iterable<E> {
         Node<E> curNode = new Node<>(e);
 
         // 增加的前一个节点
-        Node<E> preNode = tail.prev;
+        Node<E> preNode = size == 0 ? head : getNode(size - 1);
+
         // 与前一个节点连接
         preNode.next = curNode;
-        curNode.prev = preNode;
 
         // 与尾结点连接
         curNode.next = tail;
-        tail.prev = curNode;
 
         // 修改长度
         size++;
@@ -106,14 +80,10 @@ public class MyLinkedListDouble<E> implements Iterable<E> {
         // 要插入的节点
         Node<E> curNode = new Node<>(e);
 
-        // 增加的后一个节点
-        Node<E> nextNode = head.next;
         // 与后一个节点连接
-        nextNode.prev = curNode;
-        curNode.next = nextNode;
+        curNode.next = head.next;
 
         // 与头结点连接
-        curNode.prev = head;
         head.next = curNode;
 
         // 修改长度
@@ -135,31 +105,18 @@ public class MyLinkedListDouble<E> implements Iterable<E> {
         // 要插入的节点
         Node<E> newNode = new Node<>(element);
 
-        // 插入到最后的情况, 使用getNode()不能处理 index == size
+        // 如果是插入到末尾,特殊处理
         if (index == size) {
             addLast(element);
             return;
         }
 
-//        // 临时节点
-//        Node<E> curNode = head.next;
-//        // 遍历到索引位置
-//        for (int i = 0; i < index; i++) {
-//            curNode = curNode.next;
-//        }
+        // 获取插入位置的前一个节点
+        Node<E> preNode = getNode(index - 1);
 
-        // 遍历到索引位置
-        Node<E> curNode = getNode(index);
-
-
-        // 与索引前节点连接
-        Node<E> preNode = curNode.prev;
+        // 操作前后节点连接
+        newNode.next = preNode.next;
         preNode.next = newNode;
-        newNode.prev = preNode;
-
-        // 与原索引节点连接
-        newNode.next = curNode;
-        curNode.prev = newNode;
 
         // 更新长度
         size++;
@@ -184,10 +141,8 @@ public class MyLinkedListDouble<E> implements Iterable<E> {
 
         // 操作前后指针
         head.next = curNode.next;
-        curNode.next.prev = head;
 
         // 原节点垃圾回收
-        curNode.prev = null;
         curNode.next = null;
 
         // 更新size
@@ -209,22 +164,21 @@ public class MyLinkedListDouble<E> implements Iterable<E> {
             throw new NoSuchElementException();
         }
 
-        // 删除的节点
-        Node<E> curNode = tail.prev;
-
-        // 操作前后指针
-        curNode.prev.next = tail;
-        tail.prev = curNode.prev;
+        // 删除节点的前节点
+        // size-2 需要边界判断
+        Node<E> curNode = size - 2 > 0 ? getNode(size - 2) : head;
 
         // 原节点垃圾回收
-        curNode.prev = null;
-        curNode.next = null;
+        E val = curNode.next.val;
+        curNode.next.next = null;
+
+        // 操作前后指针
+        curNode.next = tail;
 
         // 更新size
         size--;
 
-        return curNode.val;
-
+        return val;
     }
 
     /**
@@ -235,23 +189,23 @@ public class MyLinkedListDouble<E> implements Iterable<E> {
      */
     public E remove(int index) {
 
-        // 获取索引位置节点
-        Node<E> curNode = getNode(index);
-
-        // 操作前后指针
-        curNode.prev.next = curNode.next;
-        curNode.next.prev = curNode.prev;
+        // 获取索引位置前一个节点
+        Node<E> preNode = index == 0 ? head : getNode(index - 1);
 
         // 原节点垃圾回收
-        curNode.prev = null;
+        Node<E> curNode = preNode.next;
+        Node<E> nextNode = curNode.next;
         curNode.next = null;
+
+        // 操作前后指针
+        preNode.next = nextNode;
 
         // 更新size
         size--;
 
         return curNode.val;
-
     }
+
 
     /**
      * 获取index位置的节点值
@@ -290,7 +244,7 @@ public class MyLinkedListDouble<E> implements Iterable<E> {
             throw new NoSuchElementException();
         }
 
-        return tail.prev.val;
+        return getNode(size - 1).val;
     }
 
 
@@ -335,6 +289,7 @@ public class MyLinkedListDouble<E> implements Iterable<E> {
 
     /**
      * 按索引获取节点
+     * size==0时,是特殊情况
      *
      * @param index 索引
      * @return 节点
