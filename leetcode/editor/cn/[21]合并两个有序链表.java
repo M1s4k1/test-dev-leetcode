@@ -48,8 +48,6 @@
 //////
 ////
 //
-
-
 //leetcode submit region begin(Prohibit modification and deletion)
 /**
  * Definition for singly-linked list.
@@ -63,43 +61,10 @@
  */
 //class Solution {
 //    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-//        // 用于返回的新链表,头节点占位
-//        ListNode newListNode = new ListNode();
-//        // 存储用于返回新链表的头节点
-//        ListNode newHead = newListNode;
-//
-//
-//        // 分别遍历两个链表
-//        ListNode curList1 = list1;
-//        ListNode curList2 = list2;
-//
-//        while (curList1 != null && curList2 != null) {
-//
-//            // 值小的放入新链表,指针移动
-//            if (curList1.val >= curList2.val) {
-//                newListNode.next = curList2;
-//                curList2 = curList2.next;
-//            } else {
-//                newListNode.next = curList1;
-//                curList1 = curList1.next;
-//            }
-//
-//            // 新链表指针移动
-//            newListNode = newListNode.next;
-//        }
-//
-//        if (curList1 == null) {
-//            newListNode.next = curList2;
-//        } else {
-//            newListNode.next = curList1;
-//        }
-//
-//
-//        return newHead.next;
-//
 //    }
 //}
 //leetcode submit region end(Prohibit modification and deletion)
+//
 
 
 package editor.cn;
@@ -181,22 +146,25 @@ class MergeTwoSortedListsCase {
         return newHead.next;
     }
 
+
+    static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode() {
+        }
+
+        ListNode(int val) {
+            this.val = val;
+        }
+
+        ListNode(int val, ListNode next) {
+            this.val = val;
+            this.next = next;
+        }
+    }
+
+
 }
 
 
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode() {
-    }
-
-    ListNode(int val) {
-        this.val = val;
-    }
-
-    ListNode(int val, ListNode next) {
-        this.val = val;
-        this.next = next;
-    }
-}

@@ -59,32 +59,14 @@
 //
 //
 //
-
-
 //leetcode submit region begin(Prohibit modification and deletion)
 //class Solution {
 //    public int removeDuplicates(int[] nums) {
-//        if (nums.length == 0) {
-//            return 0;
-//        }
-//
-//        // 快慢指针
-//        int fast = 0;
-//        int slow = 0;
-//
-//        // 快指针持续向前
-//        // 快指针与慢指针不同时,慢指针向前,并更新下一位的值
-//        for (; fast < nums.length; fast++) {
-//            if (nums[fast] != nums[slow]) {
-//                slow++;
-//                nums[slow] = nums[fast];
-//            }
-//        }
-//        return slow + 1;
-//
 //    }
 //}
 //leetcode submit region end(Prohibit modification and deletion)
+
+
 
 
 package editor.cn;
