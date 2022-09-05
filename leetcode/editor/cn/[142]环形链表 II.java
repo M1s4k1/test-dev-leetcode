@@ -1,9 +1,12 @@
-//给你一个链表的头节点 head ，判断链表中是否有环。 
+//给定一个链表的头节点 head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。 
 //
 // 如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到
-//链表中的位置（索引从 0 开始）。注意：pos 不作为参数进行传递 。仅仅是为了标识链表的实际情况。 
+//链表中的位置（索引从 0 开始）。如果 pos 是 -1，则在该链表中没有环。注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。 
 //
-// 如果链表中存在环 ，则返回 true 。 否则，返回 false 。 
+// 不允许修改 链表。 
+//
+// 
+// 
 //
 // 
 //
@@ -13,7 +16,7 @@
 //
 // 
 //输入：head = [3,2,0,-4], pos = 1
-//输出：true
+//输出：返回索引为 1 的链表节点
 //解释：链表中有一个环，其尾部连接到第二个节点。
 // 
 //
@@ -23,7 +26,7 @@
 //
 // 
 //输入：head = [1,2], pos = 0
-//输出：true
+//输出：返回索引为 0 的链表节点
 //解释：链表中有一个环，其尾部连接到第一个节点。
 // 
 //
@@ -33,7 +36,7 @@
 //
 // 
 //输入：head = [1], pos = -1
-//输出：false
+//输出：返回 null
 //解释：链表中没有环。
 // 
 //
@@ -42,25 +45,23 @@
 // 提示： 
 //
 // 
-// 链表中节点的数目范围是 [0, 10⁴] 
+// 链表中节点的数目范围在范围 [0, 10⁴] 内 
 // -10⁵ <= Node.val <= 10⁵ 
-// pos 为 -1 或者链表中的一个 有效索引 。 
+// pos 的值为 -1 或者链表中的一个有效索引 
 // 
 //
 // 
 //
-// 进阶：你能用 O(1)（即，常量）内存解决此问题吗？ 
+// 进阶：你是否可以使用 O(1) 空间解决此题？ 
 // Related Topics哈希表 | 链表 | 双指针 
 //
-// 👍 1605, 👎 0 
+// 👍 1762, 👎 0 
 //
 //
 //
 //
 
 //leetcode submit region begin(Prohibit modification and deletion)
-
-
 /**
  * Definition for singly-linked list.
  * class ListNode {
@@ -73,8 +74,8 @@
  * }
  */
 //public class Solution {
-//    public boolean hasCycle(ListNode head) {
-//
+//    public ListNode detectCycle(ListNode head) {
+//        
 //    }
 //}
 //leetcode submit region end(Prohibit modification and deletion)
@@ -83,14 +84,14 @@
 package editor.cn;
 
 /**
- * Java:环形链表
+ * Java:环形链表 II
  */
-class LinkedListCycleCase {
+class LinkedListCycleIiCase {
     public static void main(String[] args) {
-        LinkedListCycleCase runCase = new LinkedListCycleCase();
+        LinkedListCycleIiCase runCase = new LinkedListCycleIiCase();
 
         // case1
-        // 输入：head = [3,2,0,-4], pos = 1 输出：true
+        // 输入：head = [3,2,0,-4], pos = 1 输出：返回索引为 1 的链表节点
         ListNode p1 = new ListNode(3);
         ListNode p2 = new ListNode(2);
         ListNode p3 = new ListNode(0);
@@ -99,24 +100,24 @@ class LinkedListCycleCase {
         p2.next = p3;
         p3.next = p4;
         p4.next = p2;
-        System.out.println(runCase.linkedListCycle(p1));
+        System.out.println(runCase.linkedListCycleIi(p1));
 
         // case2
-        // 输入：head = [1,2], pos = 0 输出：true
+        // 输入：head = [1,2], pos = 0 输出：返回索引为 0 的链表节点
         ListNode p5 = new ListNode(1);
         ListNode p6 = new ListNode(2);
         p5.next = p6;
         p6.next = p5;
-        System.out.println(runCase.linkedListCycle(p5));
+        System.out.println(runCase.linkedListCycleIi(p5));
 
         // case3
-        // 输入：head = [1], pos = -1 输出：false
+        // 输入：输入：head = [1], pos = -1 输出：返回 null
         ListNode p7 = new ListNode(1);
-        System.out.println(runCase.linkedListCycle(p7));
+        System.out.println(runCase.linkedListCycleIi(p7));
 
     }
 
-    public boolean linkedListCycle(ListNode head) {
+    public ListNode linkedListCycleIi(ListNode head) {
 
         // 快慢指针, 快指针步长是慢指针整数倍
         ListNode fast = head, slow = head;
@@ -131,12 +132,25 @@ class LinkedListCycleCase {
         }
 
         if (fast == null || fast.next == null) {
-            return false;
+            return null;
         } else {
-            return true;
+            // 此时两个指针已经相遇
+            // 慢指针前进k步,快指针前进2k步
+            // 2k-k=k, k为环长度的整数倍
+            // 以相遇点到环起点,距离为m, 链表头节点到环起点为k-m, 慢指针重置到头节点,每次一步,前进k-m步
+            // k为环长度的整数倍,m一定小于环长, 相遇点距换起点为k-m, 每次一次,快指针前进k-m步
+            // 快慢指针下一次会在环起点相遇
+
+            // 重置慢节点
+            slow = head;
+            // 直到相遇
+            while (fast != slow) {
+                fast = fast.next;
+                slow = slow.next;
+            }
+            return fast;
         }
     }
-
 
     static class ListNode {
         int val;
