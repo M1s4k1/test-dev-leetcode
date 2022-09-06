@@ -142,7 +142,9 @@ class IntersectionOfTwoLinkedListsCase {
         p6.next = p7;
         p7.next = p8;
         p8.next = p3;
+        System.out.println(runCase.intersectionOfTwoLinkedLists(p1, p6));
         System.out.println(runCase.intersectionOfTwoLinkedLists1(p1, p6));
+        System.out.println(runCase.intersectionOfTwoLinkedLists2(p1, p6));
 
         // case2
         // 输入：intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1 输出：Intersected at '2'
@@ -157,7 +159,9 @@ class IntersectionOfTwoLinkedListsCase {
         p12.next = p13;
         ListNode p14 = new ListNode(3);
         p14.next = p12;
+        System.out.println(runCase.intersectionOfTwoLinkedLists(p9, p14));
         System.out.println(runCase.intersectionOfTwoLinkedLists1(p9, p14));
+        System.out.println(runCase.intersectionOfTwoLinkedLists2(p9, p14));
 
 
         // case3
@@ -170,7 +174,9 @@ class IntersectionOfTwoLinkedListsCase {
         ListNode p19 = new ListNode(4);
         p17.next = p18;
         p18.next = p19;
+        System.out.println(runCase.intersectionOfTwoLinkedLists(p15, p17));
         System.out.println(runCase.intersectionOfTwoLinkedLists1(p15, p17));
+        System.out.println(runCase.intersectionOfTwoLinkedLists2(p15, p17));
 
 
         // case4
@@ -188,11 +194,35 @@ class IntersectionOfTwoLinkedListsCase {
         ListNode p26 = new ListNode(2);
         p25.next = p26;
         p26.next = p22;
+        System.out.println(runCase.intersectionOfTwoLinkedLists(p20, p25));
         System.out.println(runCase.intersectionOfTwoLinkedLists1(p20, p25));
+        System.out.println(runCase.intersectionOfTwoLinkedLists2(p20, p25));
     }
 
     public ListNode intersectionOfTwoLinkedLists(ListNode headA, ListNode headB) {
-        return null;
+
+        // 教程思路1, 因为确保链表无环, 则将两个链表相连, 保证长度相同, 同事遍历到相同位置
+        // 相连后 A单独节点 -> 重复节点 -> B单独节点 -> 重复节点
+        // 相连后 B单独节点 -> 重复节点 -> A单独节点 -> 重复节点
+        // 前三部分可以保证长度相同, 则双指针会同时遍历到重复节点, 获得相交节点
+
+        ListNode curNode1 = headA, curNode2 = headB;
+
+        while (curNode1 != curNode2) {
+            if (curNode1 == null) {
+                curNode1 = headB;
+            } else {
+                curNode1 = curNode1.next;
+            }
+
+            if (curNode2 == null) {
+                curNode2 = headA;
+            } else {
+                curNode2 = curNode2.next;
+            }
+        }
+
+        return curNode1;
     }
 
     public ListNode intersectionOfTwoLinkedLists1(ListNode headA, ListNode headB) {
@@ -251,6 +281,47 @@ class IntersectionOfTwoLinkedListsCase {
             return null;
         } else {
             return curNode3;
+        }
+    }
+
+
+    public ListNode intersectionOfTwoLinkedLists2(ListNode headA, ListNode headB) {
+        // 教程思路2 让链表末尾与任意链表开头相接,使链表成环,转换为求链表环节点问题
+
+        // 尾节点连接到A链表头节点
+        ListNode curNode1 = headA;
+
+        while (curNode1.next != null) {
+            curNode1 = curNode1.next;
+        }
+        ListNode aEndNode = curNode1;
+        aEndNode.next = headA;
+
+
+        // 找出环起点
+        ListNode fast = headB, slow = headB;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                break;
+            }
+        }
+        if (fast == null || fast.next == null) {
+            // 恢复原链表
+            aEndNode.next = null;
+            return null;
+        } else {
+            slow = headB;
+
+            while (fast != slow) {
+                fast = fast.next;
+                slow = slow.next;
+            }
+
+            // 恢复原链表
+            aEndNode.next = null;
+            return fast;
         }
     }
 
