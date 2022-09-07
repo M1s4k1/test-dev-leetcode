@@ -94,7 +94,7 @@ class RemoveNthNodeFromEndOfListCase {
         runCase.removeNthNodeFromEndOfList(p6, 1);
 
 
-        // case2
+        // case3
         // 输入：head = [1], n = 1 输出：[]
         ListNode p7 = new ListNode(1);
         ListNode p8 = new ListNode(2);
