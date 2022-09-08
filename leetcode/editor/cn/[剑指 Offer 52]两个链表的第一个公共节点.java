@@ -90,16 +90,117 @@
 package editor.cn;
 
 /**
- *Java:两个链表的第一个公共节点
+ * Java:两个链表的第一个公共节点
  */
 class LiangGeLianBiaoDeDiYiGeGongGongJieDianLcofCase {
     public static void main(String[] args) {
         LiangGeLianBiaoDeDiYiGeGongGongJieDianLcofCase runCase = new LiangGeLianBiaoDeDiYiGeGongGongJieDianLcofCase();
-        runCase.liangGeLianBiaoDeDiYiGeGongGongJieDianLcof();
+
+
+        // case1
+        // 输入：输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3 输出：Intersected at '8'
+        ListNode p1 = new ListNode(4);
+        ListNode p2 = new ListNode(1);
+        ListNode p3 = new ListNode(8);
+        ListNode p4 = new ListNode(4);
+        ListNode p5 = new ListNode(5);
+        p1.next = p2;
+        p2.next = p3;
+        p3.next = p4;
+        p4.next = p5;
+        ListNode p6 = new ListNode(5);
+        ListNode p7 = new ListNode(6);
+        ListNode p8 = new ListNode(1);
+        p6.next = p7;
+        p7.next = p8;
+        p8.next = p3;
+        System.out.println(runCase.liangGeLianBiaoDeDiYiGeGongGongJieDianLcof(p1, p6));
+
+        // case2
+        // 输入：intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1 输出：Intersected at '2'
+        ListNode p9 = new ListNode(1);
+        ListNode p10 = new ListNode(9);
+        ListNode p11 = new ListNode(1);
+        ListNode p12 = new ListNode(2);
+        ListNode p13 = new ListNode(4);
+        p9.next = p10;
+        p10.next = p11;
+        p11.next = p12;
+        p12.next = p13;
+        ListNode p14 = new ListNode(3);
+        p14.next = p12;
+        System.out.println(runCase.liangGeLianBiaoDeDiYiGeGongGongJieDianLcof(p9, p14));
+
+
+        // case3
+        // 输入：intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2 输出：null
+        ListNode p15 = new ListNode(1);
+        ListNode p16 = new ListNode(5);
+        p15.next = p16;
+        ListNode p17 = new ListNode(2);
+        ListNode p18 = new ListNode(6);
+        ListNode p19 = new ListNode(4);
+        p17.next = p18;
+        p18.next = p19;
+        System.out.println(runCase.liangGeLianBiaoDeDiYiGeGongGongJieDianLcof(p15, p17));
+
+
+        // case4
+        // 输入：intersectVal = 4, listA = [2,2,4,5,4], listB = [2,2,4,5,4] skipA = 2, skipB = 2 Intersected at '2'
+        ListNode p20 = new ListNode(2);
+        ListNode p21 = new ListNode(2);
+        ListNode p22 = new ListNode(4);
+        ListNode p23 = new ListNode(5);
+        ListNode p24 = new ListNode(4);
+        p20.next = p21;
+        p21.next = p22;
+        p22.next = p23;
+        p23.next = p24;
+        ListNode p25 = new ListNode(2);
+        ListNode p26 = new ListNode(2);
+        p25.next = p26;
+        p26.next = p22;
+        System.out.println(runCase.liangGeLianBiaoDeDiYiGeGongGongJieDianLcof(p20, p25));
     }
 
-    public todo liangGeLianBiaoDeDiYiGeGongGongJieDianLcof(todo) {
-        // todo
+    public ListNode liangGeLianBiaoDeDiYiGeGongGongJieDianLcof(ListNode headA, ListNode headB) {
+
+        // 长度差
+        int aSize = 0, bSize = 0;
+        ListNode curA = headA, curB = headB;
+        while (curA != null) {
+            curA = curA.next;
+            aSize++;
+        }
+        while (curB != null) {
+            curB = curB.next;
+            bSize++;
+        }
+        int gapSize = Math.abs(aSize - bSize);
+
+        // 补齐短链
+        if (gapSize > 0) {
+            ListNode newHead = new ListNode(), newCur = newHead;
+            for (int i = 0; i < gapSize - 1; i++) {
+                newCur.next = new ListNode();
+                newCur = newCur.next;
+            }
+            newCur.next = aSize >= bSize ? headB : headA;
+            curA = aSize > bSize ? headA : newHead;
+            curB = aSize < bSize ? headB : newHead;
+        } else {
+            curA = headA;
+            curB = headB;
+        }
+
+        while (curA != curB) {
+            curA = curA.next;
+            curB = curB.next;
+        }
+
+        if (curA != null) return curA;
+        else return null;
+
     }
 
 
