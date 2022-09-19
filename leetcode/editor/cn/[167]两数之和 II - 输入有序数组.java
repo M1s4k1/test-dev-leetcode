@@ -57,21 +57,55 @@
 //    }
 //}
 ////leetcode submit region end(Prohibit modification and deletion)
-//
-//
-//package editor.cn;
-//
-///**
-// *Java:两数之和 II - 输入有序数组
-// */
-//class TwoSumIiInputArrayIsSortedCase{
-//	 public static void main(String[] args) {
-//        TwoSumIiInputArrayIsSortedCase runCase = new TwoSumIiInputArrayIsSortedCase();
-//        runCase.twoSumIiInputArrayIsSorted();
-//    }
-//
-//    public todo twoSumIiInputArrayIsSorted(todo){
-//        // todo
-//    }
-//
-//}
+
+
+package editor.cn;
+
+/**
+ * Java:两数之和 II - 输入有序数组
+ */
+class TwoSumIiInputArrayIsSortedCase {
+    public static void main(String[] args) {
+        TwoSumIiInputArrayIsSortedCase runCase = new TwoSumIiInputArrayIsSortedCase();
+
+        // case1:输入：numbers = [2,7,11,15], target = 9 输出：[1,2]
+        int[] case1 = {2, 7, 11, 15};
+        runCase.twoSumIiInputArrayIsSorted(case1, 9);
+
+        // case2:输入：numbers = [2,3,4], target = 6 输出：[1,3]
+        int[] case2 = {2, 3, 4};
+        runCase.twoSumIiInputArrayIsSorted(case2, 6);
+
+        // case3:输入：numbers = [-1,0], target = -1 输出：[1,2]
+        int[] case3 = {-1, 0};
+        runCase.twoSumIiInputArrayIsSorted(case3, -1);
+    }
+
+    public int[] twoSumIiInputArrayIsSorted(int[] numbers, int target) {
+
+        // 起点指针
+        int i = 0;
+        // 终点指针
+        int t = numbers.length - 1;
+
+        // 逼近中间值,逐行/逐列缩小
+        while (i < t) {
+
+            // 每次都是以右上角的值来进行比较
+            // 右上角值 i最小,t最大
+            // 右上角值 > tar 时, i最小,t最大 (i不能减小,t可以减小), 则t指针-1, 缩小一列,
+            // 右上角值 < tar 时, i最小,t最大 (i可以增大,t不能增大), 则i指针+1, 缩小一行,
+
+            if (numbers[i] + numbers[t] > target) {
+                t = t - 1;
+            } else if (numbers[i] + numbers[t] < target) {
+                i = i + 1;
+            } else {
+                return new int[]{i + 1, t + 1};
+            }
+        }
+        return new int[]{-1, -1};
+
+    }
+
+}
