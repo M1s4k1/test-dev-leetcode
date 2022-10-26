@@ -201,7 +201,7 @@ class IntersectionOfTwoLinkedListsCase {
 
     public ListNode intersectionOfTwoLinkedLists(ListNode headA, ListNode headB) {
 
-        // 教程思路1, 因为确保链表无环, 则将两个链表相连, 保证长度相同, 同事遍历到相同位置
+        // 教程思路1, 因为确保链表无环, 则将两个链表相连, 保证长度相同, 同时遍历到相同位置
         // 相连后 A单独节点 -> 重复节点 -> B单独节点 -> 重复节点
         // 相连后 B单独节点 -> 重复节点 -> A单独节点 -> 重复节点
         // 前三部分可以保证长度相同, 则双指针会同时遍历到重复节点, 获得相交节点
